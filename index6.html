@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Days Matter Pro · 倒数日 + 树洞</title>
+    <link rel="stylesheet" href="style6.css">
+</head>
+<body>
+<div class="app">
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header"><h2>📅 倒数本</h2><button class="close-sidebar" id="closeSidebar">✕</button></div>
+        <div class="categories">
+            <div class="category-item active" data-category="all"><span class="category-icon">📋</span><span class="category-name">全部</span><span class="category-count" id="allCount">0</span></div>
+            <div class="category-item" data-category="life"><span class="category-icon">🌸</span><span class="category-name">生活</span><span class="category-count" id="lifeCount">0</span></div>
+            <div class="category-item" data-category="work"><span class="category-icon">💼</span><span class="category-name">工作</span><span class="category-count" id="workCount">0</span></div>
+            <div class="category-item" data-category="anniversary"><span class="category-icon">🎂</span><span class="category-name">纪念日</span><span class="category-count" id="anniversaryCount">0</span></div>
+        </div>
+        <div class="custom-notebooks"><div class="section-title"><span>📓 我的倒数本</span><button class="add-notebook-btn" id="addNotebookBtn">+</button></div><div id="notebookList" class="notebook-list"></div></div>
+        <div class="sidebar-footer"><div class="footer-item" id="showTreehole"><span>🌳</span><span>树洞</span></div><div class="footer-item" id="showCalculator"><span>🧮</span><span>日期计算器</span></div><div class="footer-item" id="showMilestones"><span>🏆</span><span>里程碑</span></div></div>
+    </div>
+    <div class="main-content">
+        <div class="top-bar"><button class="menu-btn" id="menuBtn">☰</button><h1 id="currentCategoryTitle">全部</h1><div class="user-area"><span id="userGreeting" class="user-greeting"></span><button id="loginBtn" class="login-btn">登录/注册</button><button id="logoutBtn" class="logout-btn" style="display:none;">退出</button></div><button class="add-event-btn" id="openAddModalBtn">+</button></div>
+        <div id="countdownModule"><div class="stats-row"><div class="stat-mini"><div class="stat-mini-value" id="totalEvents">0</div><div class="stat-mini-label">总事件</div></div><div class="stat-mini"><div class="stat-mini-value" id="upcomingEvents">0</div><div class="stat-mini-label">即将到来</div></div></div><div class="filter-row"><button class="filter-chip active" data-status="all">全部</button><button class="filter-chip" data-status="upcoming">即将到来</button><button class="filter-chip" data-status="passed">已经过去</button><button class="filter-chip" data-status="pinned">📌 置顶</button></div><div id="eventsGrid" class="events-grid"></div></div>
+        <div id="treeholeModule" style="display: none;"><div class="treehole-container"><div class="treehole-header"><h2>🌳 树洞心声</h2><p>匿名倾诉，温暖回响</p></div><div id="treeholeLoginTip" class="login-tip" style="display:none;">🔒 请先登录，再分享你的心声或回复他人~</div><div class="post-form" id="treeholePostForm"><textarea id="treeholeContent" rows="3" placeholder="写下你的心声... (匿名发布)"></textarea><button id="publishPostBtn" class="publish-btn">🌱 发布心声</button></div><div id="postsList" class="posts-list"></div></div></div>
+        <div id="calculatorModule" style="display: none;"><div class="calculator-container"><h2>🧮 日期计算器</h2><div class="calculator-box"><div class="calc-field"><label>开始日期</label><input type="date" id="calcStartDate" class="calc-input"></div><div class="calc-field"><label>结束日期</label><input type="date" id="calcEndDate" class="calc-input"></div><button id="calcBtnPage" class="save-btn">📅 计算相差天数</button><div id="calcResultPage" class="calc-result-card" style="margin-top:15px;"></div></div></div></div>
+        <div id="milestonesModule" style="display: none;"><div class="milestones-container"><h2>🏆 我的里程碑</h2><div class="milestone-stats-page"><div class="milestone-card-page"><div class="milestone-number" id="totalDaysRecordPage">0</div><div class="milestone-label">累计事件数</div></div><div class="milestone-card-page"><div class="milestone-number" id="completedEventsCountPage">0</div><div class="milestone-label">已完成事件</div></div><div class="milestone-card-page"><div class="milestone-number" id="longestStreakPage">0</div><div class="milestone-label">最长连续打卡</div></div></div><div id="milestoneListPage" class="milestone-list-page"></div><div class="running-illustration"><p>✨ 继续奔跑，创造更多回忆 ✨</p></div></div></div>
+    </div>
+</div>
+<div id="eventModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalTitle">添加新事件</h3><span class="close-modal">&times;</span></div><div class="modal-body"><input type="text" id="eventName" placeholder="事件名称" class="modal-input"><input type="date" id="eventDate" class="modal-input"><select id="eventCategory" class="modal-input"><option value="life">🌸 生活</option><option value="work">💼 工作</option><option value="anniversary">🎂 纪念日</option></select><select id="eventNotebook" class="modal-input"></select><div class="adv-toggle" id="advToggle"><span>⚙️ 高级选项</span><span class="adv-arrow">▼</span></div><div class="adv-panel" id="advPanel"><label class="adv-label"><input type="checkbox" id="eventPinned"> 📌 置顶</label><label class="adv-label"><span>🔄 重复</span><select id="eventRepeat"><option value="none">不重复</option><option value="daily">每天</option><option value="weekly">每周</option><option value="monthly">每月</option><option value="yearly">每年</option></select></label><label class="adv-label"><span>🎨 颜色</span><select id="eventColor"><option value="default">默认</option><option value="pink">粉色</option><option value="blue">蓝色</option><option value="orange">橙色</option><option value="green">绿色</option></select></label><label class="adv-label"><span>🖼️ 背景图片</span><input type="file" id="eventBgImage" accept="image/*"></label><div id="bgPreview" style="margin-top:5px;"></div></div><button id="saveEventBtn" class="save-btn">保存</button></div></div></div>
+<div id="notesModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>📝 备注</h3><span class="close-modal">&times;</span></div><div class="modal-body"><div class="add-note-row"><input type="text" id="newNoteInput" placeholder="添加一条备注..."><button id="addNoteBtn">添加</button></div><ul id="notesList" class="notes-list"></ul></div></div></div>
+<div id="authModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="authTitle">登录</h3><span class="close-modal">&times;</span></div><div class="modal-body"><input type="text" id="authUsername" placeholder="用户名" class="modal-input"><input type="password" id="authPassword" placeholder="密码" class="modal-input"><button id="authSubmitBtn" class="save-btn">登录</button><p style="margin-top:10px; text-align:center;"><a href="#" id="switchAuthMode">还没有账号？去注册</a></p></div></div></div>
+<script src="script6.js"></script>
+</body>
+</html>
